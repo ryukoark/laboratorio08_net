@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Lab08Robbiejude.Models;
 using Lab08Robbiejude.Repositories;
+using Lab08Robbiejude.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 // Leer la cadena de conexión desde appsettings.json
@@ -15,6 +16,7 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddScoped<ILinqService, LinqService>();
 
 
 var app = builder.Build();

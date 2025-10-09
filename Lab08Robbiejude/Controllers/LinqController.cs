@@ -1,6 +1,7 @@
-using Lab08Robbiejude.Repositories;
+using Lab08Robbiejude.Services;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq; 
+using System;
+using System.Threading.Tasks;
 
 namespace Lab08Robbiejude.Controllers
 {
@@ -8,57 +9,59 @@ namespace Lab08Robbiejude.Controllers
     [Route("api/[controller]")]
     public class LinqController : ControllerBase
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly ILinqService _linqService;
 
-        public LinqController(IUnitOfWork unitOfWork)
+        public LinqController(ILinqService linqService)
         {
-            _unitOfWork = unitOfWork;
+            _linqService = linqService;
         }
 
         [HttpGet("search-linq")]
         public async Task<IActionResult> GetClientesByName([FromQuery] string name)
-        {
-            if (string.IsNullOrWhiteSpace(name))
-                return BadRequest("Debe proporcionar un nombre o parte del nombre para buscar.");
-            var clientes = await _unitOfWork.Clients.GetAllAsync();
-            var resultado = (from c in clientes
-                where c.Name.Contains(name)
-                select c).ToList();
-            return Ok(resultado);
-        }
-        // ✅ Ejercicio 2: Obtener productos con precio mayor a un valor
+            => Ok(await _linqService.GetClientesByName(name));
+
         [HttpGet("by-price")]
         public async Task<IActionResult> GetProductosByPrecio([FromQuery] decimal minPrice)
-        {
-            if (minPrice <= 0)
-                return BadRequest("Debe proporcionar un valor de precio mayor a 0.");
+            => Ok(await _linqService.GetProductosByPrecio(minPrice));
 
-            // Obtenemos todos los productos
-            var productos = await _unitOfWork.Products.GetAllAsync();
-
-            // LINQ con method syntax (Where + ToList)
-            var resultado = productos
-                .Where(p => p.Price > minPrice)
-                .ToList();
-
-            return Ok(resultado);
-        }
         [HttpGet("order-details")]
         public async Task<IActionResult> GetOrderDetails([FromQuery] int orderId)
-        {
-            var orderDetails = await _unitOfWork.OrderDetails.GetAllAsync();
-            var products = await _unitOfWork.Products.GetAllAsync();
-            var resultado = (from od in orderDetails
-                join p in products on od.Productid equals p.Productid
-                where od.Orderid == orderId
-                select new
-                {
-                    Producto = p.Name,
-                    Cantidad = od.Quantity
-                }).ToList();
+            => Ok(await _linqService.GetOrderDetails(orderId));
 
-            return Ok(resultado);
-        }
+        [HttpGet("order-total")]
+        public async Task<IActionResult> GetOrderTotal([FromQuery] int orderId)
+            => Ok(new { OrderId = orderId, TotalProductos = await _linqService.GetOrderTotalQuantity(orderId) });
 
+        [HttpGet("most-expensive-product")]
+        public async Task<IActionResult> GetMostExpensiveProduct()
+            => Ok(await _linqService.GetMostExpensiveProduct());
+
+        [HttpGet("orders-after-date")]
+        public async Task<IActionResult> GetOrdersAfterDate([FromQuery] DateTime fecha)
+            => Ok(await _linqService.GetOrdersAfterDate(fecha));
+
+        [HttpGet("average-product-price")]
+        public async Task<IActionResult> GetAverageProductPrice()
+            => Ok(new { PromedioPrecio = await _linqService.GetAverageProductPrice() });
+
+        [HttpGet("products-without-description")]
+        public async Task<IActionResult> GetProductsWithoutDescription()
+            => Ok(await _linqService.GetProductsWithoutDescription());
+
+        [HttpGet("client-with-most-orders")]
+        public async Task<IActionResult> GetClientWithMostOrders()
+            => Ok(await _linqService.GetClientWithMostOrders());
+
+        [HttpGet("orders-and-details")]
+        public async Task<IActionResult> GetOrdersAndDetails()
+            => Ok(await _linqService.GetOrdersAndDetails());
+
+        [HttpGet("products-by-client")]
+        public async Task<IActionResult> GetProductsByClient([FromQuery] int clientId)
+            => Ok(await _linqService.GetProductsByClient(clientId));
+
+        [HttpGet("clients-by-product")]
+        public async Task<IActionResult> GetClientsByProduct([FromQuery] int productId)
+            => Ok(await _linqService.GetClientsByProduct(productId));
     }
 }
