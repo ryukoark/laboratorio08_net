@@ -1,0 +1,6 @@
+@Lab08Robbiejude_HostAddress = http://localhost:5283
+
+GET {{Lab08Robbiejude_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
