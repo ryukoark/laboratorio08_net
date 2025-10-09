@@ -88,7 +88,7 @@ namespace Lab08Robbiejude.Services
         public async Task<decimal> GetAverageProductPrice()
         {
             var products = await _unitOfWork.Products.GetAllAsync();
-            return products.Select(p => p.Price).Average();
+            return products.Average(p => p.Price);
         }
 
         // =====================
