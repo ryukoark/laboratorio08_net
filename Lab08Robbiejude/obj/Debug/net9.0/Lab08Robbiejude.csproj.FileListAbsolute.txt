@@ -129,3 +129,6 @@ C:\cursos\diseño de aplicaciones empresariales avanzadas\lab\LAB08\laboratorio0
 C:\cursos\diseño de aplicaciones empresariales avanzadas\lab\LAB08\laboratorio08_net\Lab08Robbiejude\obj\Debug\net9.0\Lab08Robbiejude.pdb
 C:\cursos\diseño de aplicaciones empresariales avanzadas\lab\LAB08\laboratorio08_net\Lab08Robbiejude\obj\Debug\net9.0\Lab08Robbiejude.genruntimeconfig.cache
 C:\cursos\diseño de aplicaciones empresariales avanzadas\lab\LAB08\laboratorio08_net\Lab08Robbiejude\obj\Debug\net9.0\ref\Lab08Robbiejude.dll
+C:\cursos\diseño de aplicaciones empresariales avanzadas\lab\LAB08\laboratorio08_net\Lab08Robbiejude\bin\Debug\net9.0\Swashbuckle.AspNetCore.Swagger.dll
+C:\cursos\diseño de aplicaciones empresariales avanzadas\lab\LAB08\laboratorio08_net\Lab08Robbiejude\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerGen.dll
+C:\cursos\diseño de aplicaciones empresariales avanzadas\lab\LAB08\laboratorio08_net\Lab08Robbiejude\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerUI.dll
