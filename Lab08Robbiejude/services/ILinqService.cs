@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Lab08Robbiejude.DTOs;
+using Lab08Robbiejude.Models;
 
 namespace Lab08Robbiejude.Services
 {
@@ -41,5 +43,12 @@ namespace Lab08Robbiejude.Services
 
         // Ejercicio 12
         Task<IEnumerable<object>> GetClientsByProduct(int productId);
+        
+        Task<IEnumerable<ClientOrderDto>> GetClientOrdersAsync();
+        Task<IEnumerable<OrderDetailsDto>> GetOrdersWithDetailsAsync();
+        Task<IEnumerable<ClientProductCountDto>> GetClientsWithProductCountAsync();
+        Task<IEnumerable<SalesByClientDto>> GetSalesByClientAsync();
+        Task<IEnumerable<Client>> GetAllClientsAsync();
+        Task<IEnumerable<Product>> GetAllProductsAsync();
     }
 }

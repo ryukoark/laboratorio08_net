@@ -3,16 +3,101 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Lab08Robbiejude.DTOs;
+using Lab08Robbiejude.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Lab08Robbiejude.Services
 {
     public class LinqService : ILinqService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly LinqexampleContext _context;
 
-        public LinqService(IUnitOfWork unitOfWork)
+        public LinqService(IUnitOfWork unitOfWork, LinqexampleContext context)
         {
             _unitOfWork = unitOfWork;
+            _context = context;
+        }
+
+        public async Task<IEnumerable<ClientOrderDto>> GetClientOrdersAsync()
+        {
+            var clientOrders = await _context.Clients
+                .AsNoTracking()
+                .Include(c => c.Orders)
+                .Select(client => new ClientOrderDto
+                {
+                    ClientName = client.Name,
+                    Orders = client.Orders
+                        .Select(order => new OrderDto
+                        {
+                            OrderId = order.Orderid,
+                            OrderDate = order.Orderdate
+                        })
+                        .ToList()
+                })
+                .ToListAsync();
+
+            return clientOrders;
+        }
+
+        public async Task<IEnumerable<OrderDetailsDto>> GetOrdersWithDetailsAsync()
+        {
+            var ordersWithDetails = await _context.Orders
+                .Include(o => o.Orderdetails)
+                .ThenInclude(od => od.Product)
+                .AsNoTracking()
+                .Select(o => new OrderDetailsDto
+                {
+                    OrderId = o.Orderid,
+                    OrderDate = o.Orderdate,
+                    Products = o.Orderdetails.Select(od => new ProductDto
+                    {
+                        ProductName = od.Product.Name,
+                        Quantity = od.Quantity,
+                        Price = od.Product.Price
+                    }).ToList()
+                })
+                .ToListAsync();
+
+            return ordersWithDetails;
+        }
+        public async Task<IEnumerable<ClientProductCountDto>> GetClientsWithProductCountAsync()
+        {
+            var result = await _context.Clients
+                .AsNoTracking()
+                .Select(client => new ClientProductCountDto
+                {
+                    ClientName = client.Name,
+                    TotalProducts = client.Orders
+                        .Sum(order => order.Orderdetails
+                            .Sum(detail => detail.Quantity))
+                })
+                .ToListAsync();
+
+            return result;
+        }
+        public async Task<IEnumerable<SalesByClientDto>> GetSalesByClientAsync()
+        {
+            var ordersQuery = _unitOfWork.Context.Orders;
+
+            var result = await ordersQuery
+                .Include(order => order.Orderdetails)
+                .ThenInclude(detail => detail.Product)
+                .AsNoTracking()
+                .GroupBy(order => order.Clientid)
+                .Select(group => new SalesByClientDto
+                {
+                    ClientName = _unitOfWork.Context.Clients
+                        .FirstOrDefault(c => c.Clientid == group.Key)!.Name,
+                    TotalSales = group.Sum(order =>
+                        order.Orderdetails.Sum(detail =>
+                            detail.Quantity * detail.Product.Price))
+                })
+                .OrderByDescending(x => x.TotalSales)
+                .ToListAsync();
+
+            return result;
         }
 
         // =====================
@@ -22,8 +107,8 @@ namespace Lab08Robbiejude.Services
         {
             var clientes = await _unitOfWork.Clients.GetAllAsync();
             return (from c in clientes
-                    where c.Name.Contains(name)
-                    select c).ToList();
+                where c.Name.Contains(name)
+                select c).ToList();
         }
 
         // =====================
@@ -44,13 +129,13 @@ namespace Lab08Robbiejude.Services
             var products = await _unitOfWork.Products.GetAllAsync();
 
             return (from od in orderDetails
-                    join p in products on od.Productid equals p.Productid
-                    where od.Orderid == orderId
-                    select new
-                    {
-                        Producto = p.Name,
-                        Cantidad = od.Quantity
-                    }).ToList();
+                join p in products on od.Productid equals p.Productid
+                where od.Orderid == orderId
+                select new
+                {
+                    Producto = p.Name,
+                    Cantidad = od.Quantity
+                }).ToList();
         }
 
         // =====================
@@ -60,8 +145,8 @@ namespace Lab08Robbiejude.Services
         {
             var orderDetails = await _unitOfWork.OrderDetails.GetAllAsync();
             return orderDetails.Where(od => od.Orderid == orderId)
-                               .Select(od => od.Quantity)
-                               .Sum();
+                .Select(od => od.Quantity)
+                .Sum();
         }
 
         // =====================
@@ -109,13 +194,14 @@ namespace Lab08Robbiejude.Services
             var clients = await _unitOfWork.Clients.GetAllAsync();
 
             var resultado = (from o in orders
-                             group o by o.Clientid into g
-                             orderby g.Count() descending
-                             select new
-                             {
-                                 ClientId = g.Key,
-                                 NumeroPedidos = g.Count()
-                             }).FirstOrDefault();
+                group o by o.Clientid
+                into g
+                orderby g.Count() descending
+                select new
+                {
+                    ClientId = g.Key,
+                    NumeroPedidos = g.Count()
+                }).FirstOrDefault();
 
             if (resultado == null) return null;
 
@@ -133,14 +219,14 @@ namespace Lab08Robbiejude.Services
             var products = await _unitOfWork.Products.GetAllAsync();
 
             return (from o in orders
-                    join od in orderDetails on o.Orderid equals od.Orderid
-                    join p in products on od.Productid equals p.Productid
-                    select new
-                    {
-                        o.Orderid,
-                        Producto = p.Name,
-                        od.Quantity
-                    }).ToList();
+                join od in orderDetails on o.Orderid equals od.Orderid
+                join p in products on od.Productid equals p.Productid
+                select new
+                {
+                    o.Orderid,
+                    Producto = p.Name,
+                    od.Quantity
+                }).ToList();
         }
 
         // =====================
@@ -153,10 +239,10 @@ namespace Lab08Robbiejude.Services
             var products = await _unitOfWork.Products.GetAllAsync();
 
             return (from o in orders
-                    join od in orderDetails on o.Orderid equals od.Orderid
-                    join p in products on od.Productid equals p.Productid
-                    where o.Clientid == clientId
-                    select p.Name).Distinct().ToList();
+                join od in orderDetails on o.Orderid equals od.Orderid
+                join p in products on od.Productid equals p.Productid
+                where o.Clientid == clientId
+                select p.Name).Distinct().ToList();
         }
 
         // =====================
@@ -169,10 +255,20 @@ namespace Lab08Robbiejude.Services
             var clients = await _unitOfWork.Clients.GetAllAsync();
 
             return (from od in orderDetails
-                    join o in orders on od.Orderid equals o.Orderid
-                    join c in clients on o.Clientid equals c.Clientid
-                    where od.Productid == productId
-                    select c.Name).Distinct().ToList();
+                join o in orders on od.Orderid equals o.Orderid
+                join c in clients on o.Clientid equals c.Clientid
+                where od.Productid == productId
+                select c.Name).Distinct().ToList();
+        }
+        
+        public async Task<IEnumerable<Client>> GetAllClientsAsync()
+        {
+            return await _context.Clients.ToListAsync();
+        }
+
+        public async Task<IEnumerable<Product>> GetAllProductsAsync()
+        {
+            return await _context.Products.ToListAsync();
         }
     }
 }

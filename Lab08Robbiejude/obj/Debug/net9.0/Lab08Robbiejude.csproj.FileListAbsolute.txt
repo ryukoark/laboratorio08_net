@@ -132,3 +132,11 @@ C:\cursos\diseño de aplicaciones empresariales avanzadas\lab\LAB08\laboratorio0
 C:\cursos\diseño de aplicaciones empresariales avanzadas\lab\LAB08\laboratorio08_net\Lab08Robbiejude\bin\Debug\net9.0\Swashbuckle.AspNetCore.Swagger.dll
 C:\cursos\diseño de aplicaciones empresariales avanzadas\lab\LAB08\laboratorio08_net\Lab08Robbiejude\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerGen.dll
 C:\cursos\diseño de aplicaciones empresariales avanzadas\lab\LAB08\laboratorio08_net\Lab08Robbiejude\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerUI.dll
+C:\cursos\diseño de aplicaciones empresariales avanzadas\lab\LAB08\laboratorio08_net\Lab08Robbiejude\bin\Debug\net9.0\ClosedXML.dll
+C:\cursos\diseño de aplicaciones empresariales avanzadas\lab\LAB08\laboratorio08_net\Lab08Robbiejude\bin\Debug\net9.0\ClosedXML.Parser.dll
+C:\cursos\diseño de aplicaciones empresariales avanzadas\lab\LAB08\laboratorio08_net\Lab08Robbiejude\bin\Debug\net9.0\DocumentFormat.OpenXml.dll
+C:\cursos\diseño de aplicaciones empresariales avanzadas\lab\LAB08\laboratorio08_net\Lab08Robbiejude\bin\Debug\net9.0\DocumentFormat.OpenXml.Framework.dll
+C:\cursos\diseño de aplicaciones empresariales avanzadas\lab\LAB08\laboratorio08_net\Lab08Robbiejude\bin\Debug\net9.0\ExcelNumberFormat.dll
+C:\cursos\diseño de aplicaciones empresariales avanzadas\lab\LAB08\laboratorio08_net\Lab08Robbiejude\bin\Debug\net9.0\RBush.dll
+C:\cursos\diseño de aplicaciones empresariales avanzadas\lab\LAB08\laboratorio08_net\Lab08Robbiejude\bin\Debug\net9.0\SixLabors.Fonts.dll
+C:\cursos\diseño de aplicaciones empresariales avanzadas\lab\LAB08\laboratorio08_net\Lab08Robbiejude\bin\Debug\net9.0\System.IO.Packaging.dll

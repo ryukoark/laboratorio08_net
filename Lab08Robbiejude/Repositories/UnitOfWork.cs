@@ -10,6 +10,7 @@ namespace Lab08Robbiejude.Repositories
         public IGenericRepository<Product> Products { get; }
         public IGenericRepository<Order> Orders { get; }
         public IGenericRepository<Orderdetail> OrderDetails { get; }
+        public LinqexampleContext Context => _context; // ✅ Exponemos el DbContext
 
         public UnitOfWork(LinqexampleContext context)
         {

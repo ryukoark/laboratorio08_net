@@ -8,7 +8,7 @@ namespace Lab08Robbiejude.Repositories
         IGenericRepository<Product> Products { get; }
         IGenericRepository<Order> Orders { get; }
         IGenericRepository<Orderdetail> OrderDetails { get; }
-
+        LinqexampleContext Context { get; }
         Task<int> SaveAsync();
     }
 }
