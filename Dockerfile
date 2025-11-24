@@ -1,20 +1,21 @@
-# Usamos .NET 8 (Tu versión)
+# 1. Imagen base
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-# Copiamos todo (ya que configuraste el Root Directory en Render)
+# 2. Copiamos TODO (Esto incluye la carpeta Lab08Robbiejude)
 COPY . .
 
-# Restauramos y publicamos
-RUN dotnet restore "Lab08Robbiejude.csproj"
-RUN dotnet publish "Lab08Robbiejude.csproj" -c Release -o /app/publish
+# 3. Restauramos indicando la RUTA COMPLETA del proyecto
+# (Aquí está el cambio clave: agregamos la carpeta antes del nombre del archivo)
+RUN dotnet restore "Lab08Robbiejude/Lab08Robbiejude.csproj"
 
-# Imagen final para ejecutar
+# 4. Publicamos indicando también la ruta completa
+RUN dotnet publish "Lab08Robbiejude/Lab08Robbiejude.csproj" -c Release -o /app/publish
+
+# 5. Imagen final para ejecutar
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
 COPY --from=build /app/publish .
 
-# OJO: Como agregaste el código en Program.cs, ya no necesitamos la línea ENV ASPNETCORE_URLS aquí.
-# Render pasará el puerto automáticamente.
-
+# 6. Ejecutar
 ENTRYPOINT ["dotnet", "Lab08Robbiejude.dll"]
