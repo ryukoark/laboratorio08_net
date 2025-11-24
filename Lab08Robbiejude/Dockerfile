@@ -1,21 +1,20 @@
-# 1. Usar la imagen base de .NET 8 SDK para compilar
+# Usamos .NET 8 (Tu versión)
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-WORKDIR /source
+WORKDIR /src
 
-# 2. Copiar los archivos del proyecto
+# Copiamos todo (ya que configuraste el Root Directory en Render)
 COPY . .
 
-# 3. Restaurar dependencias y publicar
-RUN dotnet restore
-RUN dotnet publish -c Release -o /app
+# Restauramos y publicamos
+RUN dotnet restore "Lab08Robbiejude.csproj"
+RUN dotnet publish "Lab08Robbiejude.csproj" -c Release -o /app/publish
 
-# 4. Usar la imagen base de ASP.NET para ejecutar (más ligera)
-FROM mcr.microsoft.com/dotnet/aspnet:8.0
+# Imagen final para ejecutar
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
-COPY --from=build /app .
+COPY --from=build /app/publish .
 
-# 5. Configurar el puerto (Render usa este puerto internamente)
-ENV ASPNETCORE_URLS=http://+:8080
+# OJO: Como agregaste el código en Program.cs, ya no necesitamos la línea ENV ASPNETCORE_URLS aquí.
+# Render pasará el puerto automáticamente.
 
-# 6. Ejecutar la aplicación (Asegúrate que el nombre del DLL sea correcto)
 ENTRYPOINT ["dotnet", "Lab08Robbiejude.dll"]
