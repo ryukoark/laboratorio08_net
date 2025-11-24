@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Lab08Robbiejude")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+de727dc575cc8772ce6664a561a5e6f1cc6cee3a")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+49092aa6d39611862489e8192e05f2aa7ccac734")]
 [assembly: System.Reflection.AssemblyProductAttribute("Lab08Robbiejude")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Lab08Robbiejude")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
