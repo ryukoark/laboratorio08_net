@@ -1,19 +1,18 @@
-# 1. Imagen base
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+# 1. CAMBIO IMPORTANTE: Usamos la imagen SDK de .NET 9.0
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src
 
-# 2. Copiamos TODO (Esto incluye la carpeta Lab08Robbiejude)
+# 2. Copiamos todo
 COPY . .
 
-# 3. Restauramos indicando la RUTA COMPLETA del proyecto
-# (Aquí está el cambio clave: agregamos la carpeta antes del nombre del archivo)
+# 3. Restauramos (Mantenemos la ruta corregida que ya funcionó)
 RUN dotnet restore "Lab08Robbiejude/Lab08Robbiejude.csproj"
 
-# 4. Publicamos indicando también la ruta completa
+# 4. Publicamos
 RUN dotnet publish "Lab08Robbiejude/Lab08Robbiejude.csproj" -c Release -o /app/publish
 
-# 5. Imagen final para ejecutar
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
+# 5. CAMBIO IMPORTANTE: Usamos la imagen Runtime de .NET 9.0
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS final
 WORKDIR /app
 COPY --from=build /app/publish .
 
