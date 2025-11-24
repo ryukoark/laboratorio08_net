@@ -12,7 +12,7 @@ using System.Reflection;
 
 [assembly: System.Reflection.AssemblyCompanyAttribute("Lab08Robbiejude")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+753674ed2dec8417bd7de0ae6442f99400da9f43")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c3a9224fa15b357ba18a7a60f02c9e13f1832714")]
 [assembly: System.Reflection.AssemblyProductAttribute("Lab08Robbiejude")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Lab08Robbiejude")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

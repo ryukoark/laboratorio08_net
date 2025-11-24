@@ -1,0 +1,31 @@
+name: Build and Deploy .NET Application
+
+on:
+  push:
+    branches:
+      - main # Se ejecuta cada vez que subes cambios a la rama 'main'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x' # Ajustado para .NET 8
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build application
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Publish application
+        run: dotnet publish --configuration Release --no-build --output ./published
+
+    # Aquí termina la Parte 2. 
+    # Al llegar aquí, GitHub habrá confirmado que tu código funciona y se puede publicar.
